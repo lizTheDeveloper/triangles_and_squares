@@ -54,7 +54,7 @@ send_message_and_wait_for_response("Please critique the script written above, an
 send_message_and_wait_for_response("Please review and iterate on the script written above, and ensure it's aligned with our values.", thread, alignment_agent)
 
 ## do that whole thing 3 more times 
-for i in range(3):
+for i in range(1):
     ## first, ask the first agent for the python tool
     send_message_and_wait_for_response("Please apply any remaining feedback, complete any todos left in the code, and iterate on any remaining items left uncompleted.", thread, tool_developer)
     
@@ -66,4 +66,9 @@ for i in range(3):
     send_message_and_wait_for_response("Please review and iterate on the script written above, and ensure it's aligned with our values.", thread, alignment_agent)
 
 ## finally, extract the output of the final script
-send_message_and_wait_for_response("Please return only the script written above, and nothing else, this output will be written directly to a file so please do not provide any other text, or the fencing (eg: ```python) on the code block.", thread, alignment_agent)
+messages = send_message_and_wait_for_response("Please return only the script written above, and nothing else, this output will be written directly to a file so please do not provide any other text, or the fencing (eg: ```python) on the code block.", thread, alignment_agent)
+
+## write all messages to a file
+for message in messages:
+    with open("output.txt", "a") as f:
+        f.write(message.content[0].text + "\n")
